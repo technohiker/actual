@@ -15,17 +15,10 @@ import { Text } from '../common/Text';
 import { View } from '../common/View';
 import { NotesButton } from '../NotesButton';
 import { InputCell } from '../table';
+import { CategoryGroupEntity } from 'loot-core/types/models';
 
 type SidebarGroupProps = {
-  group: {
-    id: string;
-    hidden: number;
-    categories: object[];
-    is_income: number;
-    name: string;
-    sort_order: number;
-    tombstone: number;
-  };
+  group: CategoryGroupEntity
   editing?: boolean;
   collapsed: boolean;
   dragPreview?: boolean;
@@ -34,7 +27,7 @@ type SidebarGroupProps = {
   onEdit?: (id: string) => void;
   onSave?: (group: object) => Promise<void>;
   onDelete?: (id: string) => Promise<void>;
-  onApplyBudgetTemplatesInGroup?: (categories: object[]) => void;
+  onApplyBudgetTemplatesInGroup?: (categoryIDs: string[]) => void;
   onShowNewCategory?: (groupId: string) => void;
   onHideNewGroup?: () => void;
   onToggleCollapse?: (id: string) => void;

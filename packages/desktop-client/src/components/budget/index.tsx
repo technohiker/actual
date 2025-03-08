@@ -19,6 +19,8 @@ import { useSpreadsheet } from 'loot-core/src/client/SpreadsheetProvider';
 import { send } from 'loot-core/src/platform/client/fetch';
 import * as monthUtils from 'loot-core/src/shared/months';
 
+import { CategoryGroupEntity } from 'loot-core/types/models';
+
 import { useCategories } from '../../hooks/useCategories';
 import { useGlobalPref } from '../../hooks/useGlobalPref';
 import { useLocalPref } from '../../hooks/useLocalPref';
@@ -204,7 +206,7 @@ function BudgetInner(props: BudgetInnerProps) {
     }
   };
 
-  const onSaveGroup = group => {
+  const onSaveGroup = async (group: CategoryGroupEntity) => {
     if (group.id === 'new') {
       dispatch(createGroup({ name: group.name }));
     } else {
@@ -212,7 +214,7 @@ function BudgetInner(props: BudgetInnerProps) {
     }
   };
 
-  const onDeleteGroup = async id => {
+  const onDeleteGroup = async (id: string) => {
     const group = categoryGroups.find(g => g.id === id);
 
     let mustTransfer = false;
@@ -237,7 +239,7 @@ function BudgetInner(props: BudgetInnerProps) {
     }
   };
 
-  const onApplyBudgetTemplatesInGroup = async categories => {
+  const onApplyBudgetTemplatesInGroup = async (categories: string[]) => {
     dispatch(
       applyBudgetAction({
         month: startMonth,

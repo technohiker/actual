@@ -13,7 +13,7 @@ import { useCategories } from '../../hooks/useCategories';
 import { useLocalPref } from '../../hooks/useLocalPref';
 import { theme, styles } from '../../style';
 import { View } from '../common/View';
-import { type DropPosition } from '../sort';
+import { OnDropCallback, type DropPosition } from '../sort';
 
 import { BudgetCategories } from './BudgetCategories';
 import { BudgetSummaries } from './BudgetSummaries';
@@ -41,7 +41,7 @@ type BudgetTableProps = {
     >['MonthComponent'];
   };
   onSaveCategory: (category: CategoryEntity) => void;
-  onDeleteCategory: (id: CategoryEntity['id']) => void;
+  onDeleteCategory: (id: CategoryEntity['id']) => Promise<void>;
   onSaveGroup: (group: CategoryGroupEntity) => void;
   onDeleteGroup: (id: CategoryGroupEntity['id']) => void;
   onApplyBudgetTemplatesInGroup: (groupId: CategoryGroupEntity['id']) => void;
@@ -55,7 +55,7 @@ type BudgetTableProps = {
     targetId: CategoryEntity['id'] | null;
   }) => void;
   onShowActivity: (id: CategoryEntity['id'], month?: string) => void;
-  onBudgetAction: (month: string, type: string, args: unknown) => void;
+  onBudgetAction: (month: string, action: string, args: unknown) => void;
 };
 
 export function BudgetTable(props: BudgetTableProps) {
@@ -286,7 +286,6 @@ export function BudgetTable(props: BudgetTableProps) {
             onKeyDown={onKeyDown}
           >
             <BudgetCategories
-              // @ts-expect-error Fix when migrating BudgetCategories to ts
               categoryGroups={categoryGroups}
               editingCell={editing}
               dataComponents={dataComponents}
@@ -296,8 +295,8 @@ export function BudgetTable(props: BudgetTableProps) {
               onSaveGroup={onSaveGroup}
               onDeleteCategory={onDeleteCategory}
               onDeleteGroup={onDeleteGroup}
-              onReorderCategory={_onReorderCategory}
-              onReorderGroup={_onReorderGroup}
+              onReorderCategory={_onReorderCategory as OnDropCallback}
+              onReorderGroup={_onReorderGroup as OnDropCallback}
               onBudgetAction={onBudgetAction}
               onShowActivity={onShowActivity}
               onApplyBudgetTemplatesInGroup={onApplyBudgetTemplatesInGroup}

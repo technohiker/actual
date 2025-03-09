@@ -72,7 +72,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
     const items = useMemo(() => {
       const [expenseGroups, incomeGroup] = separateGroups(categoryGroups);
 
-      let items = Array.prototype.concat.apply(
+      let items: {type: string, value?: CategoryEntity, group?: CategoryGroupEntity}[] = Array.prototype.concat.apply(
         [],
         expenseGroups.map(group => {
           if (group.hidden && !showHiddenCategories) {
@@ -83,10 +83,12 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
             cat => showHiddenCategories || !cat.hidden,
           );
 
-          const items = [{ type: 'expense-group', value: { ...group } }];
+          const items: {type: string, value?: CategoryEntity, group?: CategoryGroupEntity}[] = [
+            { type: 'expense-group', group: {...group} }
+          ];
 
           if (newCategoryForGroup === group.id) {
-            items.push({ type: 'new-category' });
+            items.push({ type: 'new-category'});
           }
 
           return [
@@ -104,7 +106,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
       );
 
       if (isAddingGroup) {
-        items.push({ type: 'new-group' });
+        items.push({ type: 'new-group', value: {id: 'new', name: ''} });
       }
 
       if (incomeGroup) {
@@ -316,7 +318,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
             case 'income-group':
               content = (
                 <IncomeGroup
-                  group={item.value}
+                  group={item.group}
                   editingCell={editingCell}
                   MonthComponent={dataComponents.IncomeGroupComponent}
                   collapsed={collapsedGroupIds.includes(item.value.id)}

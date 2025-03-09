@@ -6,17 +6,10 @@ import { Row } from '../table';
 
 import { RenderMonths } from './RenderMonths';
 import { SidebarGroup } from './SidebarGroup';
+import { CategoryGroupEntity } from 'loot-core/types/models';
 
 type IncomeGroupProps = {
-  group: {
-    id: string;
-    hidden: number;
-    categories: object[];
-    is_income: number;
-    name: string;
-    sort_order: number;
-    tombstone: number;
-  };
+  group: CategoryGroupEntity
   editingCell: { id: string; cell: string } | null;
   collapsed: boolean;
   MonthComponent: () => JSX.Element;

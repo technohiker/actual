@@ -38,7 +38,7 @@ import * as trackingBudget from './tracking/TrackingBudgetComponents';
 import { TrackingBudgetProvider } from './tracking/TrackingBudgetContext';
 import { prewarmAllMonths, prewarmMonth } from './util';
 
-type TrackingReportComponents = {
+export type TrackingReportComponents = {
   SummaryComponent: typeof trackingBudget.BudgetSummary;
   ExpenseCategoryComponent: typeof trackingBudget.ExpenseCategoryMonth;
   ExpenseGroupComponent: typeof trackingBudget.ExpenseGroupMonth;
@@ -48,7 +48,7 @@ type TrackingReportComponents = {
   IncomeHeaderComponent: typeof trackingBudget.IncomeHeaderMonth;
 };
 
-type EnvelopeBudgetComponents = {
+export type EnvelopeBudgetComponents = {
   SummaryComponent: typeof EnvelopeBudgetSummary;
   ExpenseCategoryComponent: typeof envelopeBudget.ExpenseCategoryMonth;
   ExpenseGroupComponent: typeof envelopeBudget.ExpenseGroupMonth;
@@ -251,7 +251,7 @@ function BudgetInner(props: BudgetInnerProps) {
     );
   };
 
-  const onBudgetAction = (month, type, args) => {
+  const onBudgetAction = (month: string, type, args) => {
     dispatch(applyBudgetAction({ month, type, args }));
   };
 

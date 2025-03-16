@@ -22,21 +22,20 @@ import { SidebarCategory } from './SidebarCategory';
 import { SidebarGroup } from './SidebarGroup';
 import { separateGroups } from './util';
 
+import { TrackingReportComponents, EnvelopeBudgetComponents } from '.';
+
 type BudgetCategoriesProps = {
   categoryGroups: CategoryGroupEntity[],
   editingCell: { id: string; cell: string } | null,
-  dataComponents: {
-    SummaryComponent: ComponentPropsWithoutRef<typeof BudgetSummaries>["SummaryComponent"];
-    BudgetTotalsComponent: ComponentPropsWithoutRef<typeof BudgetTotals>["MonthComponent"];
-},
+  dataComponents: EnvelopeBudgetComponents | TrackingReportComponents,
   onBudgetAction: (month: string, action: string, args: unknown) => void,
   onShowActivity: (id: CategoryEntity["id"], month?: string) => void,
   onEditName: (id: string) => void,
   onEditMonth: (id: string, month: string) => void,
-  onSaveCategory: (category: CategoryEntity) => void,
-  onSaveGroup: (group: CategoryGroupEntity) => void,
+  onSaveCategory: (category: CategoryEntity) => Promise<void>,
+  onSaveGroup: (group: CategoryGroupEntity) => Promise<void>,
   onDeleteCategory: (id: CategoryEntity["id"]) => Promise<void>,
-  onDeleteGroup: (id: CategoryGroupEntity["id"]) => void,
+  onDeleteGroup: (id: CategoryGroupEntity["id"]) => Promise<void>,
   onApplyBudgetTemplatesInGroup: (groupIds: CategoryGroupEntity["id"][]) => void,
   onReorderCategory: OnDropCallback,
   onReorderGroup: OnDropCallback,
@@ -63,7 +62,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
     const [collapsedGroupIds = [], setCollapsedGroupIdsPref] =
       useLocalPref('budget.collapsed');
     const [showHiddenCategories] = useLocalPref('budget.showHiddenCategories');
-    function onCollapse(value) {
+    function onCollapse(value: string[]) {
       setCollapsedGroupIdsPref(value);
     }
 
@@ -187,7 +186,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
       setIsAddingGroup(false);
     }
 
-    function _onSaveGroup(group) {
+    async function _onSaveGroup(group) {
       onSaveGroup?.(group);
       if (group.id === 'new') {
         onHideNewGroup();

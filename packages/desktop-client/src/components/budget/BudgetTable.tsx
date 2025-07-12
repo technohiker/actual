@@ -26,9 +26,9 @@ import {
   separateGroups,
 } from './util';
 
-import {
+import type {
   OnDropCallback,
-  type DropPosition,
+  DropPosition,
 } from '@desktop-client/components/sort';
 import { SchedulesProvider } from '@desktop-client/hooks/useCachedSchedules';
 import { useCategories } from '@desktop-client/hooks/useCategories';

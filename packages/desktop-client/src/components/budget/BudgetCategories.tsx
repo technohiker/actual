@@ -1,16 +1,20 @@
-import React, { memo, useState, useMemo } from 'react';
+import React, { memo, useState, useMemo, ReactNode } from 'react';
+
+import { styles } from '@actual-app/components/styles';
+import { theme } from '@actual-app/components/theme';
+import { View } from '@actual-app/components/view';
+
+import {
+  DropHighlightPosContext,
+  type OnDropCallback,
+} from '@desktop-client/components/sort';
+import { Row } from '@desktop-client/components/table';
+import { useLocalPref } from '@desktop-client/hooks/useLocalPref';
 
 import {
   type CategoryEntity,
   type CategoryGroupEntity,
 } from 'loot-core/types/models';
-
-import { useLocalPref } from '../../hooks/useLocalPref';
-import { styles } from '@actual-app/components/styles';
-import { theme } from '@actual-app/components/theme';
-import { View } from '@actual-app/components/view';
-import { DropHighlightPosContext, OnDropCallback } from '../sort';
-import { Row } from '../table';
 
 import { ExpenseCategory } from './ExpenseCategory';
 import { ExpenseGroup } from './ExpenseGroup';
@@ -225,7 +229,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
         }}
       >
         {items.map((item, idx) => {
-          let content: React.ReactNode;
+          let content: ReactNode;
           switch (item.type) {
             case 'new-group':
               content = (

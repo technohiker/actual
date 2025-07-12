@@ -7,8 +7,7 @@ import { View } from '@actual-app/components/view';
 
 import { send } from 'loot-core/platform/client/fetch';
 import * as monthUtils from 'loot-core/shared/months';
-
-import { CategoryGroupEntity } from 'loot-core/types/models';
+import type { CategoryGroupEntity } from 'loot-core/types/models';
 
 import { DynamicBudgetTable } from './DynamicBudgetTable';
 import * as envelopeBudget from './envelope/EnvelopeBudgetComponents';

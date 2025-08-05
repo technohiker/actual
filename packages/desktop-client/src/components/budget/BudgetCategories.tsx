@@ -64,7 +64,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
     const [collapsedGroupIds = [], setCollapsedGroupIdsPref] =
       useLocalPref('budget.collapsed');
     const [showHiddenCategories] = useLocalPref('budget.showHiddenCategories');
-    function onCollapse(value) {
+    function onCollapse(value: string[]) {
       setCollapsedGroupIdsPref(value);
     }
 
@@ -77,7 +77,8 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
 
       let items: {
         type: string;
-        value?: CategoryEntity | CategoryGroupEntity;
+        value?: CategoryEntity;
+        group?: CategoryGroupEntity;
       }[] = Array.prototype.concat.apply(
         [],
         expenseGroups.map(group => {
@@ -113,14 +114,17 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
       );
 
       if (isAddingGroup) {
-        items.push({ type: 'new-group', value: { id: 'new', name: '' } });
+        items.push({
+          type: 'new-group',
+          value: { id: 'new', name: '', group: '' },
+        });
       }
 
       if (incomeGroup) {
         items = items.concat(
           [
             { type: 'income-separator' },
-            { type: 'income-group', value: incomeGroup },
+            { type: 'income-group', group: incomeGroup },
             newCategoryForGroup === incomeGroup.id && { type: 'new-category' },
             ...(collapsedGroupIds.includes(incomeGroup.id)
               ? []
@@ -237,7 +241,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
                   style={{ backgroundColor: theme.tableRowHeaderBackground }}
                 >
                   <SidebarGroup
-                    group={{ id: 'new', name: '' }}
+                    group={item.group}
                     collapsed={collapsedGroupIds.includes(item.value.id)}
                     editing={true}
                     onSave={_onSaveGroup}
@@ -273,7 +277,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
             case 'expense-group':
               content = (
                 <ExpenseGroup
-                  group={item.value}
+                  group={item.group}
                   editingCell={editingCell}
                   collapsed={collapsedGroupIds.includes(item.value.id)}
                   MonthComponent={dataComponents.ExpenseGroupComponent}
@@ -293,8 +297,8 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
             case 'expense-category':
               content = (
                 <ExpenseCategory
-                  cat={item.value as CategoryEntity}
-                  categoryGroup={item.value as CategoryGroupEntity}
+                  cat={item.value}
+                  categoryGroup={item.group}
                   editingCell={editingCell}
                   MonthComponent={dataComponents.ExpenseCategoryComponent}
                   dragState={dragState}
@@ -341,7 +345,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
             case 'income-category':
               content = (
                 <IncomeCategory
-                  cat={item.value as CategoryEntity}
+                  cat={item.value}
                   editingCell={editingCell}
                   isLast={idx === items.length - 1}
                   MonthComponent={dataComponents.IncomeCategoryComponent}

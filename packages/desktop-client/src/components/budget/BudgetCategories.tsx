@@ -7,6 +7,7 @@ import { View } from '@actual-app/components/view';
 import {
   DropHighlightPosContext,
   type OnDropCallback,
+  type DragState
 } from '@desktop-client/components/sort';
 import { Row } from '@desktop-client/components/table';
 import { useLocalPref } from '@desktop-client/hooks/useLocalPref';
@@ -24,6 +25,7 @@ import { IncomeHeader } from './IncomeHeader';
 import { SidebarCategory } from './SidebarCategory';
 import { SidebarGroup } from './SidebarGroup';
 import { separateGroups } from './util';
+import { CategoryGroup } from 'loot-core/server/importers/ynab5-types';
 
 type BudgetCategoriesProps = {
   categoryGroups: CategoryGroupEntity[];
@@ -153,7 +155,7 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
 
     // TODO: If we turn this into a reducer, we could probably memoize
     // each item in the list for better perf
-    function onDragChange(newDragState) {
+    function onDragChange(newDragState: DragState<CategoryEntity | CategoryGroupEntity>) {
       const { state } = newDragState;
 
       if (state === 'start-preview') {
@@ -170,12 +172,6 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
           });
           setSavedCollapsed(collapsedGroupIds);
         }
-      } else if (state === 'hover') {
-        setDragState({
-          ...dragState,
-          hoveredId: newDragState.id,
-          hoveredPos: newDragState.pos,
-        });
       } else if (state === 'end') {
         setDragState(null);
         onCollapse(savedCollapsed || []);
